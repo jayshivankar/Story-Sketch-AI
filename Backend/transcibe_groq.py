@@ -1,4 +1,3 @@
-# Backend/transcribe_groq.py
 import tempfile
 import requests
 import os
@@ -12,15 +11,16 @@ def transcribe_audio(audio_bytes: bytes, api_key: str) -> str:
         audio_path = f.name
 
     headers = {"Authorization": f"Bearer {api_key}"}
-    files = {"file": open(audio_path, "rb")}
     data = {
-        "model": "whisper-large-v3",
+        "model": "whisper-large-v2",  # v3 may not be available yet
         "language": "en",
         "response_format": "json"
     }
 
-    response = requests.post("https://api.groq.com/v1/audio/transcriptions",
-                             headers=headers, files=files, data=data)
+    with open(audio_path, "rb") as audio_file:
+        files = {"file": audio_file}
+        response = requests.post("https://api.groq.com/v1/audio/transcriptions",
+                                 headers=headers, files=files, data=data)
 
     if response.status_code == 200:
         transcript = response.json()["text"]
