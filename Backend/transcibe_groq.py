@@ -12,7 +12,7 @@ def transcribe_audio(audio_bytes: bytes, api_key: str) -> str:
 
     headers = {"Authorization": f"Bearer {api_key}"}
     data = {
-        "model": "whisper-large-v2",  # v3 may not be available yet
+        "model": "whisper-large-v2",
         "language": "en",
         "response_format": "json"
     }

@@ -1,16 +1,27 @@
+# Frontend/api.py
 import requests
 
 API_BASE = "http://localhost:8000"
 
-def transcribe_audio(audio_bytes:bytes):
+def transcribe_audio(audio_bytes: bytes):
     try:
         response = requests.post(
             f"{API_BASE}/transcribe",
-            files = {"file": ("recording.wav",audio_bytes,"audio/wav")}
+            files={"file": ("recording.wav", audio_bytes, "audio/wav")}
         )
         if response.status_code == 200:
-            return response.json()["transcript"]
+            return response.json()["transcript"], None
         else:
-            return None,response.json()
+            return None, response.json()
     except Exception as e:
-        return None,str(e)
+        return None, str(e)
+
+# Future functions (placeholders)
+def generate_story(prompt: str):
+    pass
+
+def generate_images(scenes: list):
+    pass
+
+def generate_audio(text: str):
+    pass

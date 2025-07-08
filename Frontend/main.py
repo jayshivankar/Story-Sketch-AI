@@ -1,43 +1,58 @@
+# Frontend/main.py
 import streamlit as st
 from audiorecorder import audiorecorder
-from api import transcribe_audio
+import io
+
+from api import transcribe_audio  # ✅ uses separate request logic
 
 st.set_page_config(page_title="🎨 StorySketch", layout="centered")
-
 st.title("🎨 StorySketch")
 st.caption("🚀 Speak or type your story — Let AI illustrate and narrate it!")
 
-# Step 1: Text Input
+# Step 1: User inputs
 user_text = st.text_input("📝 Or type your story idea:", placeholder="A robot finds treasure on the moon...")
-
-# Step 2: Audio Recorder
 st.markdown("🎤 Or record your story prompt:")
 audio = audiorecorder("Click to record", "Recording...")
 
-# Final usable prompt (either text or voice)
+transcript = None
 final_prompt = None
 
+# Step 2: Handle audio
 if len(audio) > 0:
-    st.audio(audio.tobytes(), format="audio/wav")
-    with st.spinner("🧠 Transcribing your voice with Whisper (via FastAPI)..."):
-        transcript, error = transcribe_audio(audio.tobytes())
+    buffer = io.BytesIO()
+    audio.export(buffer, format="wav")
+    wav_bytes = buffer.getvalue()
+
+    st.audio(wav_bytes, format="audio/wav")
+
+    with st.spinner("⏳ Transcribing your voice with Groq Whisper..."):
+        transcript, error = transcribe_audio(wav_bytes)
+
         if transcript:
-            st.success("✅ Transcription Complete")
+            st.success("✅ Transcription complete!")
             st.markdown(f"**📜 Transcript (from audio):** {transcript}")
-            final_prompt = transcript
         else:
-            st.error("❌ Transcription Failed")
+            st.error("❌ Transcription failed")
             st.json(error)
 
-elif user_text.strip():
+# Step 3: Determine final prompt
+if user_text.strip():
     final_prompt = user_text.strip()
+elif transcript:
+    final_prompt = transcript
 
-# Final Prompt Confirmation
+# Step 4: Display prompt & prepare next steps
 if final_prompt:
     st.markdown("---")
     st.markdown("### ✅ Final Prompt to Use:")
     st.markdown(f"> {final_prompt}")
 
-    # TODO: Add buttons to trigger image/audio/story generation later
-    st.button("🧠 Generate Story (Coming Soon)")
-    st.button("🎨 Generate Images (Coming Soon)")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.button("🧠 Generate Story", disabled=True)
+    with col2:
+        st.button("🎨 Generate Images", disabled=True)
+    with col3:
+        st.button("🔊 Generate Narration", disabled=True)
+
+    st.info("🔧 These features will be enabled in the next step.")
