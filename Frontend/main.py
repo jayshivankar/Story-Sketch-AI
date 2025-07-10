@@ -41,18 +41,8 @@ if user_text.strip():
 elif transcript:
     final_prompt = transcript
 
-# Step 4: Display prompt & prepare next steps
-if final_prompt:
-    st.markdown("---")
-    st.markdown("### ✅ Final Prompt to Use:")
-    st.markdown(f"> {final_prompt}")
 
-    # col1, col2, col3 = st.columns(3)
-    # with col1:
-    #     st.button("🧠 Generate Story", disabled=True)
-    # with col2:
-    #     st.button("🎨 Generate Images", disabled=True)
-    # with col3:
-    #     st.button("🔊 Generate Narration", disabled=True)
-    #
-    # st.info("🔧 These features will be enabled in the next step.")
+if __name__ == "__main__":
+    print(final_prompt)
+
+

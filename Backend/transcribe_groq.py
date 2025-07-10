@@ -12,7 +12,7 @@ load_dotenv()
 # Ensure directory exists
 os.makedirs("data/transcripts", exist_ok=True)
 
-# Load API key securely (optional if set as ENV var)
+# Load API key securely
 API_KEY = os.getenv("GROQ_API_KEY")
 
 # Initialize Groq client
