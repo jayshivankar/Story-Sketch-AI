@@ -47,12 +47,12 @@ if final_prompt:
     st.markdown("### ✅ Final Prompt to Use:")
     st.markdown(f"> {final_prompt}")
 
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.button("🧠 Generate Story", disabled=True)
-    with col2:
-        st.button("🎨 Generate Images", disabled=True)
-    with col3:
-        st.button("🔊 Generate Narration", disabled=True)
-
-    st.info("🔧 These features will be enabled in the next step.")
+    # col1, col2, col3 = st.columns(3)
+    # with col1:
+    #     st.button("🧠 Generate Story", disabled=True)
+    # with col2:
+    #     st.button("🎨 Generate Images", disabled=True)
+    # with col3:
+    #     st.button("🔊 Generate Narration", disabled=True)
+    #
+    # st.info("🔧 These features will be enabled in the next step.")

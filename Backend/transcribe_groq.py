@@ -2,8 +2,12 @@
 import tempfile
 import os
 from datetime import datetime
+from dotenv import load_dotenv
 from groq import Groq
 import json
+
+
+load_dotenv()
 
 # Ensure directory exists
 os.makedirs("data/transcripts", exist_ok=True)

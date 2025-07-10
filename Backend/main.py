@@ -19,7 +19,7 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-@app.post("/transcribe")  
+@app.post("/transcribe")
 async def transcribe(file: UploadFile = File(...)):
     audio_bytes = await file.read()
     transcript = transcribe_audio(audio_bytes, API_KEY)
