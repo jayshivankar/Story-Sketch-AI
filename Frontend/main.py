@@ -42,6 +42,7 @@ elif transcript:
     final_prompt = transcript
 
 
+
 if __name__ == "__main__":
     print(final_prompt)
 
