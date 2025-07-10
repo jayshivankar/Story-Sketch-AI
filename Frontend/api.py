@@ -16,12 +16,3 @@ def transcribe_audio(audio_bytes: bytes):
     except Exception as e:
         return None, str(e)
 
-# Future functions (placeholders)
-def generate_story(prompt: str):
-    pass
-
-def generate_images(scenes: list):
-    pass
-
-def generate_audio(text: str):
-    pass
