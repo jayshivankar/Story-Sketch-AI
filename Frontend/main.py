@@ -1,49 +1,45 @@
 # Frontend/main.py
 import streamlit as st
 from audiorecorder import audiorecorder
+from audio_translation import transcribe_audio, save_text
 import io
-
-from api import transcribe_audio  # ✅ uses separate request logic
 
 st.set_page_config(page_title="🎨 StorySketch", layout="centered")
 st.title("🎨 StorySketch")
-st.caption("🚀 Speak or type your story — Let AI illustrate and narrate it!")
+st.caption("🚀 Speak or type your story — Let AI bring it to life!")
 
-# Step 1: User inputs
-user_text = st.text_input("📝 Or type your story idea:", placeholder="A robot finds treasure on the moon...")
-st.markdown("🎤 Or record your story prompt:")
-audio = audiorecorder("Click to record", "Recording...")
+# Step 1: User Input
+user_text = st.text_input("📝 Or type your story idea:", placeholder="A panda flies to space...")
+audio = audiorecorder("🎤 Click to record", "Recording...")
 
-transcript = None
 final_prompt = None
+transcript = None
+story = None
 
-# Step 2: Handle audio
 if len(audio) > 0:
     buffer = io.BytesIO()
     audio.export(buffer, format="wav")
     wav_bytes = buffer.getvalue()
-
     st.audio(wav_bytes, format="audio/wav")
 
-    with st.spinner("⏳ Transcribing your voice with Groq Whisper..."):
-        transcript, error = transcribe_audio(wav_bytes)
+    with st.spinner("🔊 Transcribing with Whisper..."):
+        transcript = transcribe_audio(wav_bytes)
+        st.success("📝 Transcription complete!")
+        st.markdown(f"**Transcript:** {transcript}")
+        final_prompt = transcript
+        save_text("data/transcripts", transcript, "transcript")
 
-        if transcript:
-            st.success("✅ Transcription complete!")
-            st.markdown(f"**📜 Transcript (from audio):** {transcript}")
-        else:
-            st.error("❌ Transcription failed")
-            st.json(error)
-
-# Step 3: Determine final prompt
-if user_text.strip():
+elif user_text.strip():
     final_prompt = user_text.strip()
-elif transcript:
-    final_prompt = transcript
 
 
-
-if __name__ == "__main__":
-    print(final_prompt)
-
+#
+# if final_prompt:
+#     if st.button("🧠 Generate Story"):
+#         with st.spinner("Creating your magical story..."):
+#             story = generate_story(final_prompt)
+#             st.success("📖 Story generated!")
+#             st.markdown("### Your Story")
+#             st.markdown(story)
+#             save_text("data/stories", story, "story")
 
