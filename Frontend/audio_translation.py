@@ -14,13 +14,19 @@ groq_client = Groq(api_key=GROQ_API_KEY)
 
 
 def transcribe_audio(audio_bytes: bytes) -> str:
-    with io.BytesIO(audio_bytes) as buffer:
-        result = groq_client.audio.transcriptions.create(
-            file=buffer,
-            model="whisper-large-v3-turbo",
-            language="en",
-            response_format="json"
-        )
+    # Wrap in file-like object
+    buffer = io.BytesIO(audio_bytes)
+
+    # Give it a name ending in ".wav"
+    buffer.name = "recording.wav"
+
+    result = groq_client.audio.transcriptions.create(
+        file=buffer,
+        model="whisper-large-v3-turbo",
+        language="en",
+        response_format="json"
+    )
+
     return result.text.strip()
 
 
