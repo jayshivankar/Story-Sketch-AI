@@ -6,16 +6,19 @@ from dotenv import load_dotenv
 load_dotenv()
 HF_API_TOKEN = os.getenv("HF_API_TOKEN")
 
-API_URL = "https://api-inference.huggingface.co/models/PixArt-alpha/PixArt-XL-2-1024-MS"
+# ✅ A working model for inference
+API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1"
 headers = {
     "Authorization": f"Bearer {HF_API_TOKEN}",
     "Content-Type": "application/json"
 }
 
-def generate_pixart_image(prompt: str, save_path="generated_image.png"):
+def generate_image(prompt: str, save_path="generated_image.png"):
     payload = {
         "inputs": prompt,
-        "parameters": {"guidance_scale": 6.0, "num_inference_steps": 30}
+        "options": {
+            "wait_for_model": True
+        }
     }
 
     response = requests.post(API_URL, headers=headers, json=payload)
@@ -28,3 +31,8 @@ def generate_pixart_image(prompt: str, save_path="generated_image.png"):
     else:
         print(f"❌ Error {response.status_code}: {response.text}")
         return None
+
+# Example usage
+if __name__ == "__main__":
+    prompt = "Josh the panda floats in space wearing an astronaut suit, in children's illustration style"
+    generate_image(prompt, save_path="josh_space.png")
