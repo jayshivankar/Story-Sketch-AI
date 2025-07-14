@@ -1,38 +1,37 @@
-# generate_image.py
-import requests
+import replicate
 import os
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
-HF_API_TOKEN = os.getenv("HF_API_TOKEN")
+os.environ["REPLICATE_API_TOKEN"] = os.getenv("REPLICATE_API_TOKEN")
 
-# ✅ A working model for inference
-API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1"
-headers = {
-    "Authorization": f"Bearer {HF_API_TOKEN}",
-    "Content-Type": "application/json"
-}
+MODEL = "lucataco/sdxl:8cf5e2c0f24061b627eaa9b21fa60a84d913fd0c5cecf65c6f5818f5fc6c0c60"
 
-def generate_image(prompt: str, save_path="generated_image.png"):
-    payload = {
-        "inputs": prompt,
-        "options": {
-            "wait_for_model": True
-        }
-    }
 
-    response = requests.post(API_URL, headers=headers, json=payload)
+def generate_and_save_image(prompt: str, save_path: str = "scene.png") -> str:
+    print(f"🎨 Generating image for: {prompt}")
 
-    if response.status_code == 200:
-        with open(save_path, "wb") as f:
-            f.write(response.content)
-        print(f"✅ Image saved to {save_path}")
-        return save_path
+    output = replicate.run(
+        MODEL,
+        input={"prompt": prompt}
+    )
+
+    if isinstance(output, list) and output:
+        image_url = output[0]
+        try:
+            img_data = requests.get(image_url).content
+            with open(save_path, "wb") as f:
+                f.write(img_data)
+            print(f"✅ Image saved to {save_path}")
+            return save_path
+        except Exception as e:
+            print(f"❌ Failed to download image: {e}")
+            return None
     else:
-        print(f"❌ Error {response.status_code}: {response.text}")
+        print("❌ No image generated.")
         return None
 
-# Example usage
 if __name__ == "__main__":
-    prompt = "Josh the panda floats in space wearing an astronaut suit, in children's illustration style"
-    generate_image(prompt, save_path="josh_space.png")
+    prompt = "Josh the panda exploring an alien planet, in children's illustration style"
+    generate_and_save_image(prompt, save_path="josh_alien_planet.png")
