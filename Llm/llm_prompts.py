@@ -2,7 +2,7 @@ from llm_helper import llm
 from langchain_core.messages import HumanMessage
 
 #  TEST INPUT
-final_prompt = "A panda wants to go to the moon"
+final_prompt = "A warrior dragon  "
 
 def generate_story(prompt: str) -> str:
     global generated_story
