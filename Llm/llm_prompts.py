@@ -71,7 +71,7 @@ if __name__ == "__main__":
     print("\n🎉 Generated Story:\n")
     print(story)
 
-    scenes = extract_scenes(generated_story)
+    scenes = extract_scenes()
     print("\n🎉 Generated Scenes:\n")
     print(scenes)
 
