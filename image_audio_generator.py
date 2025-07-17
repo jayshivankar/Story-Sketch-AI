@@ -34,6 +34,10 @@ def generate_all_assets(scene_prompts: list[str]):
         print(f"\n📍 Processing Scene {i}")
         img = generate_scene_image(prompt, i)
         aud = generate_scene_audio(prompt, i)
-        make_scene_video(i, img, aud)
+
+        if img and os.path.exists(img):
+            make_scene_video(i, img, aud)
+        else:
+            print(f"⚠️ Skipping Scene {i} due to missing image")
 
     print("\n All scenes processed and saved.")
