@@ -10,7 +10,7 @@ Path("data/audio").mkdir(parents=True, exist_ok=True)
 Path("data/videos").mkdir(parents=True, exist_ok=True)
 
 def generate_scene_image(prompt: str, index: int) -> str:
-    path = f"data/images/scene_{index:02}.webp"
+    path = f"data/images/scene_{index:02}.png"
     generate_flux_image(prompt, path)
     return path
 
@@ -24,7 +24,7 @@ def generate_scene_audio(prompt: str, index: int) -> str:
 def make_scene_video(index: int, image_path: str, audio_path: str) -> str:
     video_path = f"data/videos/scene_{index:02}.mp4"
     audio = AudioFileClip(audio_path)
-    clip = ImageClip(image_path).set_duration(audio.duration).set_audio(audio)
+    clip = ImageClip(image_path).with_duration(audio.duration).with_audio(audio)
     clip.write_videofile(video_path, fps=24, logger=None)
     print(f"🎬 Video created: {video_path}")
     return video_path

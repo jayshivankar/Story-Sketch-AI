@@ -32,24 +32,26 @@ Use short paragraphs (2–4 lines) and include fun details kids will enjoy.
 
 def extract_scenes(story_text: str) -> list[str]:
     scene_splitter_prompt = f"""
-You are a helpful assistant that transforms a children's story into a list of meaningful, visually descriptive sentences — one for each major scene.
+You are a helpful assistant that transforms a children's story into a list of vivid, visually descriptive, and fun-to-read sentences — one for each major scene.
 
 Your job is to:
 - Read the story carefully
 - Identify key visual moments, actions, or emotional beats
 - Write short, self-contained, descriptive sentences (1–2 per scene)
 - Make them suitable for generating images or video clips (so they must be visual)
+- Make sure they also sound delightful and imaginative when read aloud
 
 🧸 IMPORTANT: In every scene you generate, include the main character’s name **and what they are**.  
-For example: "Josh the panda", "Luna the fairy", or "Ember the dragon".
+For example: "Josh the panda", "Luna the fairy", or "Ember the dragon". This helps children visualize who they are.
 
-Each sentence should:
-- Be clear, vivid, and grounded in the story
-- Avoid dialogue
+🎉 Each sentence should:
+- Be lively, playful, and spark the imagination
+- Use child-friendly, expressive language
+- Be clear, grounded in the story, and **avoid dialogue**
 - Focus on what could be shown in a picture
-- No preamble
+- Have no preamble or explanation
 
-Output format:
+📦 Output format:
 Scene 1: ...
 Scene 2: ...
 Scene 3: ...
@@ -60,7 +62,11 @@ Here is the story:
 
     response = llm.invoke([HumanMessage(content=scene_splitter_prompt)])
     raw_output = response.content.strip()
-    scenes = [line.split(":", 1)[1].strip() for line in raw_output.splitlines() if line.lower().startswith("scene")]
+    scenes = [
+        line.split(":", 1)[1].strip()
+        for line in raw_output.splitlines()
+        if line.lower().startswith("scene")
+    ]
     return scenes
 
 
@@ -71,7 +77,7 @@ if __name__ == "__main__":
     print("\n🎉 Generated Story:\n")
     print(story)
 
-    scenes = extract_scenes()
+    scenes = extract_scenes(generated_story)
     print("\n🎉 Generated Scenes:\n")
     print(scenes)
 
