@@ -2,6 +2,8 @@
 from moviepy import VideoFileClip, concatenate_videoclips
 import os
 
+
+
 def merge_all_scenes(output_file="final_story_video.mp4"):
     video_dir = "data/videos"
     scene_files = sorted([
@@ -14,3 +16,5 @@ def merge_all_scenes(output_file="final_story_video.mp4"):
     final = concatenate_videoclips(clips, method="compose")
     final.write_videofile(output_file, fps=24)
     print(f"\n✅ Final story video created: {output_file}")
+
+
