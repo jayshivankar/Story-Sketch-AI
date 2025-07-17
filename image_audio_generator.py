@@ -5,14 +5,14 @@ from gtts import gTTS
 from moviepy import ImageClip, AudioFileClip
 from image_generation import generate_flux_image
 
+# Ensure folders exist
 Path("data/images").mkdir(parents=True, exist_ok=True)
 Path("data/audio").mkdir(parents=True, exist_ok=True)
 Path("data/videos").mkdir(parents=True, exist_ok=True)
 
 def generate_scene_image(prompt: str, index: int) -> str:
-    path = f"data/images/scene_{index:02}.png"
-    generate_flux_image(prompt, path)
-    return path
+    img_path = generate_flux_image(prompt, index)  # Updated
+    return img_path
 
 def generate_scene_audio(prompt: str, index: int) -> str:
     path = f"data/audio/scene_{index:02}.mp3"
@@ -40,4 +40,4 @@ def generate_all_assets(scene_prompts: list[str]):
         else:
             print(f"⚠️ Skipping Scene {i} due to missing image")
 
-    print("\n All scenes processed and saved.")
+    print("\n✅ All scenes processed and saved.")
