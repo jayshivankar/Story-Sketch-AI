@@ -10,7 +10,7 @@ Path("data/audio").mkdir(parents=True, exist_ok=True)
 Path("data/videos").mkdir(parents=True, exist_ok=True)
 
 def generate_scene_image(prompt: str, index: int) -> str:
-    path = f"data/images/scene_{index:02}.png"
+    path = f"data/images/scene_{index:02}.webp"
     generate_flux_image(prompt, path)
     return path
 
