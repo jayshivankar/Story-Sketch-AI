@@ -12,7 +12,7 @@ def generate_flux_image(prompt: str, index: int, save_dir="data/images") -> str:
             "prompt": prompt
         }
 
-        output = replicate.run("black-forest-labs/flux-schnell", input=input)
+        output = replicate.run("black-forest-labs/flux-dev", input=input)
 
         os.makedirs(save_dir, exist_ok=True)
         image_paths = []
