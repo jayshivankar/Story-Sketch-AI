@@ -1,4 +1,4 @@
-from Llm.llm_helper import llm
+from llm.llm_helper import llm
 from langchain_core.messages import HumanMessage
 
 #  TEST INPUT

@@ -1,11 +1,19 @@
 import streamlit as st
 from audiorecorder import audiorecorder
 from audio_translation import transcribe_audio, save_text
-from Llm.llm_prompts import generate_story, extract_scenes
+import sys
+import os
+# root path for relative module resolution
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from llm.llm_prompts import generate_story, extract_scenes
 from image_audio_generator import generate_all_assets
 from merge_videos import merge_all_scenes
 import io
-import os
+
+
+
+# Add root path for relative module resolution
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 st.set_page_config(page_title="🎨 StorySketch", layout="centered")
 st.markdown("<h1 style='text-align: center;'>🎨 StorySketch</h1>", unsafe_allow_html=True)
