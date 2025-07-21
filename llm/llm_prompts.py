@@ -4,6 +4,8 @@ from langchain_core.messages import HumanMessage
 #  TEST INPUT
 final_prompt = "A warrior dragon  "
 
+# story generation
+
 def generate_story(prompt: str) -> str:
     global generated_story
     story_prompt = f"""
@@ -29,6 +31,7 @@ Use short paragraphs (2–4 lines) and include fun details kids will enjoy.
     generated_story = response.content.strip()
     return generated_story
 
+# scene generation
 
 def extract_scenes(story_text: str) -> list[str]:
     scene_splitter_prompt = f"""
@@ -42,7 +45,8 @@ Your job is to:
 - Make sure they also sound delightful and imaginative when read aloud
 
 🧸 IMPORTANT: In every scene you generate, include the main character’s name **and what they are**.  
-For example: "Josh the panda", "Luna the fairy", or "Ember the dragon". This helps children visualize who they are.
+For example: "Josh the panda", " The fairy Luna", or "Ember the dragon". This helps children visualize who they are.
+Use above examples simultaneously and also generate some different startings for the scenes similar to the examples.
 
 🎉 Each sentence should:
 - Be lively, playful, and spark the imagination
