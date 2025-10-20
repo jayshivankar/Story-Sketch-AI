@@ -93,4 +93,3 @@ if final_prompt:
 else:
     st.info("💡 Please enter text or record audio to start.")
 
-#  i have 3.12 python version in my ubuntu,but for a project in pycharm i want 3.10 as some libraries won't work in 3.12 version

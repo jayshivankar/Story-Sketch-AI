@@ -15,6 +15,7 @@ pillow==11.3.0
 # Audio processing
 gTTS==2.5.4
 openai-whisper==20250625
+audioop-lts # Added for compatibility with Python 3.13
 
 # Streamlit integration
 streamlit==1.49.1
@@ -22,4 +23,3 @@ audio-recorder-streamlit==0.0.10
 
 # Version control integration
 GitPython==3.1.45
-
