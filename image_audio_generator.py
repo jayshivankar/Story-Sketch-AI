@@ -2,8 +2,8 @@
 import os
 from pathlib import Path
 from gtts import gTTS
-from moviepy import ImageClip, AudioFileClip
 from image_generation import generate_flux_image
+from moviepy import ImageClip, AudioFileClip
 
 # Ensure folders exist
 Path("data/images").mkdir(parents=True, exist_ok=True)

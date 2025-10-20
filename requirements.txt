@@ -1,0 +1,25 @@
+# Web framework and server
+fastapi==0.117.1
+uvicorn==0.36.0
+
+# LLM integration
+groq==0.31.1
+langchain-core==0.3.76
+langchain-groq==0.3.8
+
+# Data handling and AI
+pandas==2.3.2
+numpy==2.2.6
+pillow==11.3.0
+
+# Audio processing
+gTTS==2.5.4
+openai-whisper==20250625
+
+# Streamlit integration
+streamlit==1.49.1
+audio-recorder-streamlit==0.0.10
+
+# Version control integration
+GitPython==3.1.45
+

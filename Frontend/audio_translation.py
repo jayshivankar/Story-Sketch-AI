@@ -2,8 +2,7 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 from groq import Groq
-from langchain_groq import ChatGroq
-from langchain_core.messages import HumanMessage
+
 import io
 
 load_dotenv()
