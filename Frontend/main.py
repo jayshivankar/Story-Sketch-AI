@@ -1,95 +1,105 @@
 import streamlit as st
 from audio_recorder_streamlit import audio_recorder
 from audio_translation import transcribe_audio, save_text
-import sys
-import os
-import io
-
-# Add root path for relative module resolution
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from llm.llm_prompts import generate_story, extract_scenes
 from image_audio_generator import generate_all_assets
 from merge_videos import merge_all_scenes
+import io
+import os
 
-# Streamlit page config
-st.set_page_config(page_title="🎨 StorySketch", layout="centered")
-st.markdown("<h1 style='text-align: center;'>🎨 StorySketch</h1>", unsafe_allow_html=True)
-st.caption("🚀 Speak or type your story — Let AI bring it to life!")
+# -------------------------------
+# Streamlit Page Setup
+# -------------------------------
+st.set_page_config(page_title="🎨 StorySketch", page_icon="🎬", layout="centered")
+st.title("🎨 StorySketch – Turn Voice Into Magical Stories")
+st.caption("🎙️ Speak or type your idea — Let AI create the story, images, and video!")
 st.markdown("---")
 
-# Step 1: User Input
-st.subheader("🎤 Voice or ✍️ Text Prompt")
-col1, col2 = st.columns(2)
+# -------------------------------
+# Initialize Session State
+# -------------------------------
+for key in ["final_prompt", "story", "scenes", "video_ready"]:
+    if key not in st.session_state:
+        st.session_state[key] = None
 
-# Text Input
-with col1:
-    user_text = st.text_input("📝 Type your story idea", placeholder="A panda flies to space...")
+# -------------------------------
+# Input Section: Voice or Text
+# -------------------------------
+tab1, tab2 = st.tabs(["🎤 Voice Input", "✍️ Text Input"])
 
-# Audio Input
-with col2:
-    audio = audio_recorder("🎙️ Record Prompt","Recording...")
+with tab1:
+    st.info("Record your story idea in English and let AI transcribe it.")
+    audio_bytes = audio_recorder(text="Click to Record", recording_color="#ff4b4b")
 
-final_prompt = None
-transcript = None
-
-# Process audio input
-if audio:
-    buffer = io.BytesIO()
-    audio.export(buffer, format="wav")
-    wav_bytes = buffer.getvalue()
-    st.audio(wav_bytes, format="audio/wav")
-
-    with st.spinner("🔊 Transcribing..."):
-        try:
-            transcript = transcribe_audio(wav_bytes)
-            st.success("📝 Transcription complete!")
-            st.markdown(f"**Transcript:** `{transcript}`")
-            final_prompt = transcript
-            save_text("data/transcripts", transcript, "transcript")
-        except Exception as e:
-            st.error(f"Error during transcription: {e}")
-
-# Use text input if available
-elif user_text.strip():
-    final_prompt = user_text.strip()
-
-# Main generation logic
-if final_prompt:
-    st.markdown("---")
-    st.button("✨ Generate Story & Video")  # Change to button widget
-
-    with st.spinner("🧠 Generating story..."):
-        try:
-            story = generate_story(final_prompt)
-            st.success("📖 Story generated!")
-            st.markdown("### 📚 Story:")
-            st.markdown(story)
-        except Exception as e:
-            st.error(f"Error during story generation: {e}")
-
-    if story:
-        with st.spinner("🪄 Extracting scene prompts..."):
+    if audio_bytes:
+        st.audio(audio_bytes, format="audio/wav")
+        with st.spinner("Transcribing your voice... ⏳"):
             try:
-                scenes = extract_scenes(story)
-                st.success(f"📸 Extracted {len(scenes)} scenes!")
+                transcript = transcribe_audio(audio_bytes)
+                st.session_state.final_prompt = transcript
+                st.success("📝 Transcription complete!")
+                st.text_area("Transcript:", transcript, height=120)
+                save_text("data/transcripts", transcript, "transcript")
             except Exception as e:
-                st.error(f"Error extracting scenes: {e}")
+                st.error(f"⚠️ Audio transcription failed: {e}")
+                st.session_state.final_prompt = None
 
-        if scenes:
-            with st.spinner("🎨 Generating images and audio..."):
-                try:
+with tab2:
+    text_input = st.text_area("Enter your story idea below:", placeholder="A panda learns to fly in space 🚀")
+    if text_input.strip():
+        st.session_state.final_prompt = text_input.strip()
+
+# -------------------------------
+# Story Generation Button
+# -------------------------------
+st.markdown("---")
+if st.button("✨ Generate Story"):
+    if not st.session_state.final_prompt:
+        st.warning("⚠️ Please provide an idea using voice or text.")
+    else:
+        with st.spinner("🧠 Crafting your story..."):
+            try:
+                story = generate_story(st.session_state.final_prompt)
+                st.session_state.story = story
+                st.success("📖 Story generated successfully!")
+                st.markdown("### 📚 Story Preview")
+                st.write(story)
+            except Exception as e:
+                st.error(f"❌ Story generation failed: {e}")
+
+# -------------------------------
+# Scene Extraction + Video Creation
+# -------------------------------
+if st.session_state.story:
+    with st.expander("🎬 Create Story Video", expanded=True):
+        if st.button("Generate Scenes & Video"):
+            try:
+                with st.spinner("🪄 Extracting key scenes..."):
+                    scenes = extract_scenes(st.session_state.story)
+                    st.session_state.scenes = scenes
+                    st.success(f"✅ Extracted {len(scenes)} scenes!")
+
+                with st.spinner("🎨 Generating visuals and narration..."):
                     generate_all_assets(scenes)
-                except Exception as e:
-                    st.error(f"Error during asset generation: {e}")
+                    st.info("Scene assets generated successfully.")
 
-            with st.spinner("🎬 Merging scene videos..."):
-                try:
+                with st.spinner("🎞️ Merging scenes into final video..."):
                     output_path = "final_story_video.mp4"
                     merge_all_scenes(output_path)
-                    st.success("✅ Final video is ready!")
-                    st.video(output_path)
-                except Exception as e:
-                    st.error(f"Error during video merging: {e}")
-else:
-    st.info("💡 Please enter text or record audio to start.")
+                    st.session_state.video_ready = output_path
+                    st.success("🎉 Final video created successfully!")
 
+            except Exception as e:
+                st.error(f"❌ Error while generating video: {e}")
+
+# -------------------------------
+# Display Final Video
+# -------------------------------
+if st.session_state.video_ready:
+    st.markdown("### 🎥 Your Final Story Video")
+    st.video(st.session_state.video_ready)
+    with open(st.session_state.video_ready, "rb") as f:
+        st.download_button("⬇️ Download Video", f, file_name="final_story_video.mp4")
+
+st.markdown("---")
+st.caption("🚀 Built using Streamlit, Groq LLM, Replicate, and gTTS.")
