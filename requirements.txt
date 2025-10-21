@@ -1,9 +1,10 @@
 streamlit
-audio-recorder-streamlit
+openai
 groq
-python-dotenv
+Pillow
+requests
+pydub
+numpy
+torch
+transformers
 gtts
-moviepy
-replicate
-langchain
-langchain-groq

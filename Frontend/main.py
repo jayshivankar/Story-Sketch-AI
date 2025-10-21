@@ -1,11 +1,9 @@
 import streamlit as st
 from audio_recorder_streamlit import audio_recorder
-from audio_translation import transcribe_audio, save_text
+from Frontend.audio_translation import transcribe_audio, save_text
 from llm.llm_prompts import generate_story, extract_scenes
 from image_audio_generator import generate_all_assets
 from merge_videos import merge_all_scenes
-import io
-import os
 
 # -------------------------------
 # Streamlit Page Setup
