@@ -28,3 +28,6 @@ ffmpeg-python==0.2.0
 
 # --- Optional Enhancements (UI + Logging) ---
 rich==13.9.2
+
+replicate==0.27.0
+
