@@ -1,10 +1,30 @@
-streamlit
-openai
-groq
-Pillow
-requests
-pydub
-numpy
-torch
-transformers
-gtts
+# --- Core Framework ---
+streamlit==1.39.0
+python-dotenv==1.0.1
+
+# --- Audio & Media Processing ---
+gtts==2.5.4
+moviepy==2.1.1
+imageio==2.35.1
+imageio-ffmpeg==0.5.1
+
+# --- AI / LLM Integration ---
+groq==0.33.0
+langchain==0.2.12
+langchain-core==0.2.29
+langchain-groq==0.1.5
+langsmith==0.1.80
+
+# --- Data & Utils ---
+pandas==2.2.3
+numpy==1.26.4
+requests==2.32.3
+pydantic==2.9.2
+typing-extensions==4.12.2
+tqdm==4.66.5
+
+# --- Video/Audio Merge ---
+ffmpeg-python==0.2.0
+
+# --- Optional Enhancements (UI + Logging) ---
+rich==13.9.2
