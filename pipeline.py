@@ -1,5 +1,5 @@
 
-from llm.llm_prompts import generate_story, extract_scenes
+from llm_prompts import generate_story, extract_scenes
 from image_audio_generator import generate_all_assets
 from merge_videos import merge_all_scenes
 

@@ -1,7 +1,7 @@
 import streamlit as st
 import tempfile
-from Frontend.audio_translation import transcribe_audio, save_text
-from llm.llm_prompts import generate_story, extract_scenes
+from audio_translation import transcribe_audio, save_text
+from llm_prompts import generate_story, extract_scenes
 from image_audio_generator import generate_all_assets
 from merge_videos import merge_all_scenes
 

@@ -1,4 +1,4 @@
-from llm.llm_helper import llm
+from llm_helper import llm
 from langchain_core.messages import HumanMessage
 
 def generate_story(prompt: str) -> str:
